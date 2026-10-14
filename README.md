@@ -13,6 +13,9 @@ by flashing full‑screen colour sequences at a colour sensor.
   sender to 100 ms symbols or slower.
 - **Reference decoder** (`js/receiver.js`): the receiver state machine from the spec,
   used by the tests and meant as the template for a microcontroller port.
+- **Arduino library** ([`arduino/RGBReceiver`](arduino/RGBReceiver/README.md)): the
+  receiver for boards, with drivers for the TCS34725 colour sensor and for analog
+  RGB photodiodes; fits an Arduino Uno.
 
 ## Use it
 
@@ -38,6 +41,7 @@ branch `main`, folder `/ (root)`. The site is then served at
 ```sh
 npm test          # RS/CRC unit tests + end-to-end runs through a simulated noisy channel
 npm run vectors   # prints the test vectors quoted in docs/SPEC.md
+npm run test:arduino  # builds the Arduino library with g++ and runs it on simulated links
 ```
 
 The channel simulator (`tests/sim.mjs`) and camera simulator (`tests/camera-sim.mjs`) inject colour misreads, timing jitter,
@@ -55,5 +59,6 @@ js/sampler.js           RGB sample classifier + segmenter (camera front end)
 receive.html, js/receive.js  camera test receiver page
 js/app.js               page logic: input, settings, full-screen player
 docs/SPEC.md            protocol v1
-tests/                  test runner, channel simulator, vector generator
+arduino/RGBReceiver/    Arduino receiver library (sensor drivers, decoder, examples)
+tests/                  test runner, channel simulator, vector generator, Arduino host tests
 ```

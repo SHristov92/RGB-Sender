@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "node tests/run.mjs",
-    "vectors": "node tests/vectors.mjs"
+    "vectors": "node tests/vectors.mjs",
+    "test:arduino": "node tests/arduino.mjs"
   },
   "license": "MIT"
 }

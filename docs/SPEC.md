@@ -377,7 +377,10 @@ bad chunk.
 
 The reference implementation is [`js/receiver.js`](../js/receiver.js)
 (segments in, messages out); the sample‑to‑segment front end in 3.3 is
-sensor‑specific. A microcontroller port follows the same state machine:
+sensor‑specific. The Arduino library
+[`arduino/RGBReceiver`](../arduino/RGBReceiver/README.md) ports the same state
+machine and adds the front end (classifier, calibration from SYNC and CAL,
+segmenter). Any port follows this state machine:
 
 ```
 state = HUNT; T_est = median of the last 31 segment durations
