@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111318">
+  <title>RGB Sender</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>RGB Sender</h1>
+      <p class="lede">Send data to a microcontroller by flashing colours at its light sensor. Protocol: <a href="https://github.com/SHristov92/RGB-Sender/blob/main/docs/SPEC.md">SPEC v1</a>.</p>
+    </header>
+
+    <section class="card">
+      <h2>Message</h2>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" data-tab="text" aria-selected="true">Text</button>
+        <button type="button" role="tab" data-tab="wifi" aria-selected="false">Wi‑Fi</button>
+        <button type="button" role="tab" data-tab="file" aria-selected="false">File</button>
+      </div>
+
+      <div class="tab-panel" data-panel="text">
+        <label for="text-input">Text (UTF‑8)</label>
+        <textarea id="text-input" rows="4" spellcheck="false">Hello from RGB Sender!</textarea>
+        <label class="inline"><input type="checkbox" id="text-json"> Mark as JSON</label>
+      </div>
+
+      <div class="tab-panel" data-panel="wifi" hidden>
+        <label for="wifi-ssid">Network name (SSID)</label>
+        <input id="wifi-ssid" type="text" autocomplete="off" spellcheck="false">
+        <label for="wifi-pass">Password</label>
+        <input id="wifi-pass" type="text" autocomplete="off" spellcheck="false">
+        <label for="wifi-sec">Security</label>
+        <select id="wifi-sec">
+          <option value="WPA">WPA/WPA2/WPA3</option>
+          <option value="WEP">WEP</option>
+          <option value="nopass">None</option>
+        </select>
+        <label class="inline"><input type="checkbox" id="wifi-hidden"> Hidden network</label>
+      </div>
+
+      <div class="tab-panel" data-panel="file" hidden>
+        <label for="file-input">File (sent as raw bytes)</label>
+        <input id="file-input" type="file">
+        <p class="hint" id="file-info">No file chosen.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <details>
+        <summary><h2>Link settings</h2></summary>
+        <div class="grid">
+          <label>Colour mode
+            <select id="opt-mode">
+              <option value="0">Robust (5 colours, 2 bits/symbol)</option>
+              <option value="1">Dense (8 colours, 2.67 bits/symbol)</option>
+            </select>
+          </label>
+          <label>Symbol duration
+            <select id="opt-symbol">
+              <option value="33.3">33 ms (2 frames @60 Hz)</option>
+              <option value="50" selected>50 ms (3 frames @60 Hz)</option>
+              <option value="66.7">67 ms (4 frames @60 Hz)</option>
+              <option value="100">100 ms</option>
+              <option value="200">200 ms (debug)</option>
+            </select>
+          </label>
+          <label>Chunk size (bytes per frame)
+            <select id="opt-chunk">
+              <option>16</option><option>32</option><option selected>48</option><option>64</option><option>96</option><option>128</option>
+            </select>
+          </label>
+          <label>Error correction per frame
+            <select id="opt-ecc">
+              <option value="2">Light: 2 byte errors</option>
+              <option value="4">Medium: 4 byte errors</option>
+              <option value="8" selected>Strong: 8 byte errors</option>
+              <option value="12">Very strong: 12 byte errors</option>
+            </select>
+          </label>
+          <label>Parity frames
+            <select id="opt-parity">
+              <option value="0">None</option>
+              <option value="2">1 per 2 data frames</option>
+              <option value="4" selected>1 per 4 data frames</option>
+              <option value="8">1 per 8 data frames</option>
+            </select>
+          </label>
+          <label>Lead‑in
+            <select id="opt-preamble">
+              <option value="6">Short</option>
+              <option value="12" selected>Normal</option>
+              <option value="40">Long</option>
+            </select>
+          </label>
+        </div>
+      </details>
+    </section>
+
+    <section class="card summary" aria-live="polite">
+      <dl id="summary"></dl>
+      <p class="error" id="error" hidden></p>
+    </section>
+
+    <section class="actions">
+      <button type="button" class="primary" id="start">Start sending</button>
+      <button type="button" id="test-pattern">Show test pattern</button>
+      <button type="button" id="preview">Preview</button>
+    </section>
+
+    <section class="card preview" id="preview-box" hidden>
+      <div class="swatch" id="preview-swatch"></div>
+      <p class="hint" id="preview-info"></p>
+    </section>
+
+    <section class="card tips">
+      <h2>Before you start</h2>
+      <ol>
+        <li>Turn brightness to maximum and switch off auto‑brightness, Night Shift / blue‑light filter, True Tone and battery saver.</li>
+        <li>Hold the sensor flat against the centre of the screen inside its light shield.</li>
+        <li>Tap <b>Start sending</b>. The screen flashes until you tap it again. The message repeats, so the board can start listening at any time.</li>
+      </ol>
+    </section>
+  </main>
+
+  <div class="stage" id="stage" hidden>
+    <div class="hud" id="hud"></div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

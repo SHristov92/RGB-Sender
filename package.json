@@ -1,0 +1,12 @@
+{
+  "name": "rgb-sender",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Send data from a phone screen to a microcontroller with blinking RGB colour sequences",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run.mjs",
+    "vectors": "node tests/vectors.mjs"
+  },
+  "license": "MIT"
+}
