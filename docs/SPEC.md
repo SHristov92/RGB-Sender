@@ -409,6 +409,20 @@ on segment (colour, dur):
 (up to 1.5 T at T = 2 frames) count as one slot, while two merged slots (a
 misread colour equal to its neighbour) still count as two.
 
+### 8.1 Camera test receiver
+
+`receive.html` decodes with a phone or laptop camera instead of a colour
+sensor, for testing senders without hardware. Its front end
+([`js/sampler.js`](../js/sampler.js)) needs no calibration: because the palette
+is exactly the eight on/off combinations of R, G and B, each camera frame's
+centre region is averaged and every channel is thresholded halfway between the
+lowest and highest value it showed in the last 4 s. Values within ±12 % of the
+threshold are treated as "between colours" (a frame exposed across a symbol
+change) and skipped, and runs shorter than about one camera frame are folded
+into their neighbours. The resulting segments feed the reference decoder
+unchanged. Cameras deliver 24–60 frames/s, so the sender needs `T ≥ 100 ms`
+for a 30 fps camera (≥ 2.5 camera frames per symbol).
+
 RAM estimate (ATmega328P, defaults): symbol buffer can be avoided by converting
 digits to bytes on the fly (≤ 80 bytes body codeword + 16 header), message
 buffer K·L bytes, parity buffer P·L bytes, RS decoder ≈ 150 bytes of stack plus

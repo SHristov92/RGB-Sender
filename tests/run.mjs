@@ -13,6 +13,8 @@ import {
 } from '../js/protocol.js';
 import { Receiver, colorsToBytes } from '../js/receiver.js';
 import { simulate, makeRng } from './sim.mjs';
+import { cameraFrames } from './camera-sim.mjs';
+import { ChannelClassifier, Segmenter } from '../js/sampler.js';
 
 let failures = 0;
 function test(name, fn) {
@@ -195,6 +197,40 @@ test('binary payload with tiny chunks and no parity', () => {
   assert.ok(got);
   assert.equal(got.contentType, CONTENT_TYPE.BINARY);
   assert.deepEqual(got.data, data);
+});
+
+function runCamera(mode, camera, seed) {
+  const tx = buildTransmission(CONTENT_TYPE.TEXT, enc.encode(SAMPLE), { mode });
+  const rng = makeRng(seed);
+  let got = null;
+  const rx = new Receiver((m) => (got ??= m));
+  const classifier = new ChannelClassifier();
+  const frameMs = 1000 / (camera.fps ?? 30);
+  const seg = new Segmenter(
+    (c, d) => rx.pushSegment(c, d),
+    () => (rx.frames.estimatedT ? Math.min(0.45 * rx.frames.estimatedT, 1.2 * frameMs) : 0),
+  );
+  const slots = [...tx.preamble, ...tx.round, ...tx.round, ...tx.round];
+  for (const { t, rgb } of cameraFrames(slots, camera, rng)) {
+    seg.push(t, classifier.classify(t, rgb));
+    if (got) break;
+  }
+  return got;
+}
+
+for (const mode of [MODE.ROBUST, MODE.DENSE]) {
+  test(`camera front end (${mode ? 'dense' : 'robust'}): 30 fps camera, 100 ms symbols, colour cast and noise`, () => {
+    for (let seed = 70; seed < 74; seed++) {
+      const got = runCamera(mode, { T: 100, fps: 30, phase: seed }, seed);
+      assert.ok(got, `seed ${seed}`);
+      assert.equal(dec.decode(got.data), SAMPLE);
+    }
+  });
+}
+
+test('camera front end: 60 fps camera, 50 ms symbols', () => {
+  const got = runCamera(MODE.ROBUST, { T: 50, fps: 60, exposureMs: 10 }, 80);
+  assert.ok(got);
 });
 
 if (failures) {

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111318">
+  <title>RGB Receiver</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>Camera test receiver</h1>
+      <p class="lede">Decode an RGB Sender transmission with a camera, to test the sender without building hardware. <a href="index.html">Back to the sender</a>.</p>
+    </header>
+
+    <section class="card">
+      <div class="camera">
+        <video id="video" playsinline muted></video>
+        <div class="roi" id="roi"></div>
+        <p class="camera-placeholder" id="placeholder">Camera is off</p>
+      </div>
+      <div class="grid">
+        <label>Camera
+          <select id="camera-select"><option value="">Rear camera (default)</option></select>
+        </label>
+        <label>Sampling area: <span id="roi-label">20%</span> of the picture
+          <input type="range" id="roi-size" min="5" max="60" value="20">
+        </label>
+      </div>
+      <section class="actions">
+        <button type="button" class="primary" id="cam-start">Start camera</button>
+        <button type="button" id="reset">Reset decoder</button>
+      </section>
+      <p class="hint">On the sending phone choose a symbol duration of <b>100 ms or slower</b> (most cameras record 30 frames per second), then point this camera at its screen so the screen fills the box.</p>
+    </section>
+
+    <section class="card">
+      <h2>Live</h2>
+      <div class="live">
+        <div class="swatch small" id="sample-swatch" title="Average colour in the box"></div>
+        <div class="swatch small" id="class-swatch" title="Classified colour"></div>
+        <dl id="live-stats"></dl>
+      </div>
+      <div class="progress" aria-hidden="true"><div id="progress-bar"></div></div>
+    </section>
+
+    <section class="card result" id="result" hidden>
+      <h2>Received</h2>
+      <dl id="result-meta"></dl>
+      <pre id="result-text"></pre>
+      <section class="actions">
+        <button type="button" id="copy">Copy</button>
+        <button type="button" id="download">Download</button>
+      </section>
+    </section>
+
+    <section class="card">
+      <h2>Log</h2>
+      <ol class="log" id="log"></ol>
+    </section>
+  </main>
+
+  <script type="module" src="js/receive.js"></script>
+</body>
+</html>

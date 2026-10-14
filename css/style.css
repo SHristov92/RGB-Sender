@@ -128,3 +128,47 @@ details summary { cursor: pointer; list-style-position: outside; }
   mix-blend-mode: difference;
   pointer-events: none;
 }
+
+/* Camera receiver page */
+.camera {
+  position: relative;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+.camera video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.camera-placeholder { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: #9aa1ad; }
+.roi {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #000;
+  border-radius: 4px;
+  pointer-events: none;
+}
+input[type="range"] { width: 100%; margin-top: 8px; }
+.live { display: flex; gap: 12px; align-items: flex-start; }
+.swatch.small { width: 48px; height: 48px; }
+.live dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0; font-size: 0.9rem; }
+.live dt { color: var(--muted); }
+.live dd { margin: 0; font-variant-numeric: tabular-nums; }
+.progress { height: 6px; background: var(--border); border-radius: 3px; margin-top: 12px; overflow: hidden; }
+.progress div { height: 100%; width: 0; background: var(--accent); transition: width 0.2s; }
+.result pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font: 0.9rem/1.4 ui-monospace, monospace;
+  max-height: 320px;
+  overflow: auto;
+}
+.result dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0 0 8px; }
+.result dt { color: var(--muted); }
+.result dd { margin: 0; }
+.log { margin: 0; padding-left: 0; list-style: none; font: 0.85rem/1.4 ui-monospace, monospace; color: var(--muted); max-height: 240px; overflow: auto; }
